@@ -9,7 +9,7 @@ const AdminList = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/admins');
+        const response = await axios.get('https://mon-api-rmv3.onrender.com/admins');
         setAdmins(response.data);
       } catch (err) {
         setError('Erreur lors du chargement des administrateurs');

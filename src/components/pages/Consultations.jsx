@@ -19,7 +19,7 @@ import {
 
 // Constante pour la pagination
 const PAGE_SIZE = 8;
-const API_BASE_URL = 'http://localhost:3001'; // Constante pour l'URL de base
+const API_BASE_URL = 'https://mon-api-rmv3.onrender.com'; // Constante pour l'URL de base
 
 export default function Consultations() {
   // --- États des données ---

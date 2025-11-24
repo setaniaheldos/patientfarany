@@ -19,7 +19,7 @@ const Examen = () => {
   const fetchExamens = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('http://localhost:3001/examens');
+      const res = await axios.get('https://mon-api-rmv3.onrender.com/examens');
       setExamens(res.data);
     } catch {
       setError("Erreur lors du chargement des examens.");
@@ -29,7 +29,7 @@ const Examen = () => {
 
   const fetchConsultations = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/consultations');
+      const res = await axios.get('https://mon-api-rmv3.onrender.com/consultations');
       setConsultations(res.data);
     } catch {
       setConsultations([]);
@@ -56,10 +56,10 @@ const Examen = () => {
     }
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/examens/${editingId}`, form);
+        await axios.put(`https://mon-api-rmv3.onrender.com/examens/${editingId}`, form);
         setMessage("Examen modifié !");
       } else {
-        await axios.post('http://localhost:3001/examens', form);
+        await axios.post('https://mon-api-rmv3.onrender.com/examens', form);
         setMessage("Examen ajouté !");
       }
       setForm({ idConsult: '', typeExamen: '', dateExamen: '', resultat: '' });
@@ -94,7 +94,7 @@ const Examen = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Supprimer cet examen ?")) return;
     try {
-      await axios.delete(`http://localhost:3001/examens/${id}`);
+      await axios.delete(`https://mon-api-rmv3.onrender.com/examens/${id}`);
       setMessage("Examen supprimé !");
       fetchExamens();
       setTimeout(() => setMessage(''), 2000);

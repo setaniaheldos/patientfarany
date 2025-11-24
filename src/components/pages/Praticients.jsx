@@ -35,7 +35,7 @@ export default function Praticiens() {
   // --- Fetch Data ---
   const fetchPraticiens = () => {
     setLoading(true);
-    axios.get('http://localhost:3001/praticiens')
+    axios.get('https://mon-api-rmv3.onrender.com/praticiens')
       .then(res => setPraticiens(res.data))
       .catch(() => handleError("Erreur lors du chargement des praticiens."))
       .finally(() => setLoading(false));
@@ -59,7 +59,7 @@ export default function Praticiens() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const method = isEditing ? 'put' : 'post';
-    const url = `http://localhost:3001/praticiens${isEditing ? '/' + formData.cinPraticien : ''}`;
+    const url = `https://mon-api-rmv3.onrender.com/praticiens${isEditing ? '/' + formData.cinPraticien : ''}`;
 
     axios[method](url, formData)
       .then(() => {
@@ -89,7 +89,7 @@ export default function Praticiens() {
 
   const handleDelete = (cinPraticien) => {
     if (window.confirm("⚠️ ATTENTION : La suppression est définitive. Voulez-vous vraiment continuer ?")) {
-      axios.delete(`http://localhost:3001/praticiens/${cinPraticien}`)
+      axios.delete(`https://mon-api-rmv3.onrender.com/praticiens/${cinPraticien}`)
         .then(() => {
           fetchPraticiens();
           handleSuccess("Praticien supprimé avec succès.");

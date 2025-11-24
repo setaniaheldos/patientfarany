@@ -34,32 +34,32 @@ export default function Home() {
 
   useEffect(() => {
     // --- Existing API Calls for Counts ---
-    axios.get('http://localhost:3001/praticiens').then(res => {
+    axios.get('https://mon-api-rmv3.onrender.com/praticiens').then(res => {
       setCounts(c => ({ ...c, praticiens: res.data.length }));
     });
-    axios.get('http://localhost:3001/rendezvous').then(res => {
+    axios.get('https://mon-api-rmv3.onrender.com/rendezvous').then(res => {
       setCounts(c => ({ ...c, rendezvous: res.data.length }));
     });
-    axios.get('http://localhost:3001/consultations').then(res => {
+    axios.get('https://mon-api-rmv3.onrender.com/consultations').then(res => {
       setCounts(c => ({ ...c, consultations: res.data.length }));
     });
-    axios.get('http://localhost:3001/prescriptions').then(res => {
+    axios.get('https://mon-api-rmv3.onrender.com/prescriptions').then(res => {
       setCounts(c => ({ ...c, prescriptions: res.data.length }));
     });
-    axios.get('http://localhost:3001/patients').then(res => {
+    axios.get('https://mon-api-rmv3.onrender.com/patients').then(res => {
       setCounts(c => ({ ...c, patients: res.data.length }));
     });
     // NOTE: La route /utilisateurs n'existe peut-être pas. Assurez-vous d'utiliser la bonne route (/users ou /admins)
-    axios.get('http://localhost:3001/utilisateurs').then(res => {
+    axios.get('https://mon-api-rmv3.onrender.com/utilisateurs').then(res => {
       setCounts(c => ({ ...c, utilisateurs: res.data.length }));
     }).catch(() => {
       // Fallback si la route /utilisateurs échoue
-      axios.get('http://localhost:3001/users').then(res => {
+      axios.get('https://mon-api-rmv3.onrender.com/users').then(res => {
         setCounts(c => ({ ...c, utilisateurs: res.data.length }));
       });
     });
 
-    axios.get('http://localhost:3001/admins')
+    axios.get('https://mon-api-rmv3.onrender.com/admins')
       .then(res => {
         if (res.data && res.data.length > 0) {
           setAdminName(res.data[0].nom || res.data[0].email || 'Administrateur');
@@ -72,7 +72,7 @@ export default function Home() {
     const userId = localStorage.getItem('userId');
     if (userId) {
       // NOTE: Ajustez la route si /utilisateurs/:id n'est pas la bonne
-      axios.get(`http://localhost:3001/utilisateurs/${userId}`)
+      axios.get(`https://mon-api-rmv3.onrender.com/utilisateurs/${userId}`)
         .then(res => {
           if (res.data && (res.data.nom || res.data.email)) {
             setUserName(res.data.nom || res.data.email);

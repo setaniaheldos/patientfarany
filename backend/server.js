@@ -14,9 +14,12 @@ app.use(express.json());
 
 // Remplacer par votre chaîne de connexion PostgreSQL
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://user:password@host:port/database', 
-  // Si vous utilisez Render ou une autre plateforme nécessitant SSL :
-  // ssl: { rejectUnauthorized: false } 
+  connectionString: process.env.DATABASE_URL || 'postgresql://test_oxlk_user:HPJylFPcg61EkYWio3q6oJ16dxHQj7E8@dpg-d4i9ou3qkflc73bmnugg-a.oregon-postgres.render.com/test_oxlk', 
+  
+  // 🔑 CORRECTION : Décommenter (ou ajouter) l'objet ssl
+  ssl: { 
+    rejectUnauthorized: false // Permet de se connecter sans vérifier le certificat CA (nécessaire pour la plupart des hébergements cloud)
+  } 
 });
 
 pool.connect((err) => {
