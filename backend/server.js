@@ -15,7 +15,7 @@ app.use(express.json());
 
 // Connexion à PostgreSQL
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://test_s0cj_user:gEPKE0njXS8Whcj8cZhjxNIRvWt7toqK@dpg-d4ijd9q4d50c73d4p2eg-a.oregon-postgres.render.com/test_s0cj',
+  connectionString: process.env.DATABASE_URL || 'postgresql://test_0hfc_user:6q90sC1QDH1zoHBPjbQaC5Hl1QJ3uZ7K@dpg-d4ik8ngdl3ps73d9i980-a.oregon-postgres.render.com/test_0hfc',
   ssl: {
     rejectUnauthorized: false  // Accepte les certificats auto-signés (idéal pour dev/prod cloud)
   }

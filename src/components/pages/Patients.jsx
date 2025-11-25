@@ -27,6 +27,11 @@ export default function Patients() {
   const [notification, setNotification] = useState({ show: false, message: '', type: 'success' });
   const [loading, setLoading] = useState(false);
 
+  // API Base URL (local en dev, remote en prod)
+  const API_BASE = process.env.NODE_ENV === 'production' 
+    ? 'https://mon-api-rmv3.onrender.com' 
+    : 'http://localhost:3001';
+
   // --- Gestion des Notifications ---
   const handleNotification = (msg, type) => {
     setNotification({ show: true, message: msg, type: type });
@@ -39,9 +44,12 @@ export default function Patients() {
   // --- Fetch Data ---
   const fetchPatients = () => {
     setLoading(true);
-    axios.get('https://mon-api-rmv3.onrender.com/patients')
+    axios.get(`${API_BASE}/patients`)
       .then(res => setPatients(res.data))
-      .catch(() => handleError("Erreur lors du chargement des patients."))
+      .catch(err => {
+        console.error('Erreur fetchPatients:', err);
+        handleError("Erreur lors du chargement des patients.");
+      })
       .finally(() => setLoading(false));
   };
 
@@ -56,7 +64,7 @@ export default function Patients() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const url = `https://mon-api-rmv3.onrender.com/patients${isEditing ? '/' + formData.cinPatient : ''}`;
+    const url = `${API_BASE}/patients${isEditing ? '/' + formData.cinPatient : ''}`;
     const method = isEditing ? 'put' : 'post';
     
     // Validation simple de l'âge
@@ -65,15 +73,26 @@ export default function Patients() {
         return;
     }
 
+    // Validation des champs requis
+    if (!formData.cinPatient || !formData.prenom || !formData.nom || !formData.age || !formData.sexe) {
+      handleError("Veuillez remplir tous les champs obligatoires (marqués par *).");
+      return;
+    }
+
     axios[method](url, formData)
-      .then(() => {
+      .then((response) => {
+        console.log('Réponse succès:', response);
         fetchPatients();
         setFormData({ cinPatient: '', prenom: '', nom: '', age: '', adresse: '', email: '', sexe: 'Homme', telephone: '' });
         setIsEditing(false);
         setShowForm(false);
         handleSuccess(isEditing ? "Dossier patient modifié avec succès." : "Nouveau patient ajouté avec succès.");
       })
-      .catch(() => handleError(`Erreur lors de l'enregistrement du patient. Vérifiez le CIN unique.`));
+      .catch((err) => {
+        console.error('Erreur handleSubmit:', err.response?.data || err.message);
+        const errorMsg = err.response?.data?.error || `Erreur lors de l'enregistrement du patient. Vérifiez le CIN unique.`;
+        handleError(errorMsg);
+      });
   };
 
   const handleEdit = (patient) => {
@@ -98,12 +117,15 @@ export default function Patients() {
 
   const handleDelete = (cin) => {
     if (window.confirm("⚠️ ATTENTION : La suppression est définitive. Voulez-vous vraiment continuer ?")) {
-      axios.delete(`https://mon-api-rmv3.onrender.com/patients/${cin}`)
+      axios.delete(`${API_BASE}/patients/${cin}`)
         .then(() => {
           fetchPatients();
           handleSuccess("Patient supprimé avec succès.");
         })
-        .catch(() => handleError("Erreur lors de la suppression du patient."));
+        .catch(err => {
+          console.error('Erreur handleDelete:', err);
+          handleError("Erreur lors de la suppression du patient.");
+        });
     }
   };
 
