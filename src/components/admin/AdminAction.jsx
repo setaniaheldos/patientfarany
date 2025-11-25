@@ -11,7 +11,7 @@ const AdminAction = () => {
   const fetchPendingUsers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get('https://mon-api-rmv3.onrender.com/users/pending');
+      const res = await axios.get('http://localhost:3001/users/pending');
       setPendingUsers(res.data);
     } catch (err) {
       setMessage("Erreur lors du chargement des utilisateurs.");
@@ -26,7 +26,7 @@ const AdminAction = () => {
   // Valider un utilisateur
   const approveUser = async (id) => {
     try {
-      await axios.put(`https://mon-api-rmv3.onrender.com/users/${id}/approve`);
+      await axios.put(`http://localhost:3001/users/${id}/approve`);
       setMessage("Utilisateur validé avec succès !");
       setPendingUsers(pendingUsers.filter(u => u.id !== id));
       setTimeout(() => setMessage(''), 2000);
@@ -38,7 +38,7 @@ const AdminAction = () => {
   // Refuser/supprimer un utilisateur
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`https://mon-api-rmv3.onrender.com/users/${id}`);
+      await axios.delete(`http://localhost:3001/users/${id}`);
       setMessage("Utilisateur supprimé.");
       setPendingUsers(pendingUsers.filter(u => u.id !== id));
       setTimeout(() => setMessage(''), 2000);

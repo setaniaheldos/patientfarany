@@ -11,12 +11,12 @@ const AdminDashboard = () => {
 
   // Charger admins et utilisateurs
   useEffect(() => {
-    axios.get('https://mon-api-rmv3.onrender.com/admins')
+    axios.get('http://localhost:3001/admins')
       .then(res => setAdmins(res.data))
       .catch(() => setAdmins([]))
       .finally(() => setLoadingAdmins(false));
 
-    axios.get('https://mon-api-rmv3.onrender.com/users')
+    axios.get('http://localhost:3001/users')
       .then(res => setUsers(res.data))
       .catch(() => setUsers([]))
       .finally(() => setLoadingUsers(false));
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     if (idx === 0) return; // Ne pas supprimer le premier admin
     if (!window.confirm("Voulez-vous vraiment supprimer cet admin ?")) return;
     try {
-      await axios.delete(`https://mon-api-rmv3.onrender.com/admins/${id}`);
+      await axios.delete(`http://localhost:3001/admins/${id}`);
       setAdmins(admins.filter(a => a.id !== id));
       setMessage("Admin supprimé !");
       setTimeout(() => setMessage(''), 2000);
@@ -40,7 +40,7 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
     try {
-      await axios.delete(`https://mon-api-rmv3.onrender.com/users/${id}`);
+      await axios.delete(`http://localhost:3001/users/${id}`);
       setUsers(users.filter(u => u.id !== id));
       setMessage("Utilisateur supprimé !");
       setTimeout(() => setMessage(''), 2000);

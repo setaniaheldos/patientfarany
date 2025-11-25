@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 // est chargée globalement via un script CDN dans le HTML parent pour que l'objet 'XLSX' soit disponible.
 // <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
 
-const API_BASE_URL = 'https://mon-api-rmv3.onrender.com';
+const API_BASE_URL = 'http://localhost:3001';
 
 // --- Composant Toast Personnalisé et Hook ---
 const useToast = () => {

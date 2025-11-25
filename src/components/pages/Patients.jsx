@@ -39,7 +39,7 @@ export default function Patients() {
   // --- Fetch Data ---
   const fetchPatients = () => {
     setLoading(true);
-    axios.get('https://mon-api-rmv3.onrender.com/patients')
+    axios.get('http://localhost:3001/patients')
       .then(res => setPatients(res.data))
       .catch(() => handleError("Erreur lors du chargement des patients."))
       .finally(() => setLoading(false));
@@ -56,7 +56,7 @@ export default function Patients() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const url = `https://mon-api-rmv3.onrender.com/patients${isEditing ? '/' + formData.cinPatient : ''}`;
+    const url = `http://localhost:3001/patients${isEditing ? '/' + formData.cinPatient : ''}`;
     const method = isEditing ? 'put' : 'post';
     
     // Validation simple de l'âge
@@ -98,7 +98,7 @@ export default function Patients() {
 
   const handleDelete = (cin) => {
     if (window.confirm("⚠️ ATTENTION : La suppression est définitive. Voulez-vous vraiment continuer ?")) {
-      axios.delete(`https://mon-api-rmv3.onrender.com/patients/${cin}`)
+      axios.delete(`http://localhost:3001/patients/${cin}`)
         .then(() => {
           fetchPatients();
           handleSuccess("Patient supprimé avec succès.");
