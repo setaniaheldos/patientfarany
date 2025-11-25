@@ -4,8 +4,12 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 
 const app = express();
-const PORT = 3001;
+// const PORT = 3001;
+// Avant
+// const PORT = 3001;
 
+// Après (utilise le port de Render, fallback à 3001 en local)
+const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
@@ -666,3 +670,4 @@ app.put('/rendezvous/:id', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });
+
