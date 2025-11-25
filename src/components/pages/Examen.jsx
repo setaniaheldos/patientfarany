@@ -36,11 +36,11 @@ const FactureTousPatients = () => {
     const fetchData = async () => {
       try {
         const [pat, rdv, consult, presc, prat] = await Promise.all([
-          axios.get('http://localhost:3001/patients'),
-          axios.get('http://localhost:3001/rendezvous'),
-          axios.get('http://localhost:3001/consultations'),
-          axios.get('http://localhost:3001/prescriptions'),
-          axios.get('http://localhost:3001/praticiens')
+          axios.get('https://mon-api-rmv3.onrender.com/patients'),
+          axios.get('https://mon-api-rmv3.onrender.com/rendezvous'),
+          axios.get('https://mon-api-rmv3.onrender.com/consultations'),
+          axios.get('https://mon-api-rmv3.onrender.com/prescriptions'),
+          axios.get('https://mon-api-rmv3.onrender.com/praticiens')
         ]);
 
         let filteredPatients = pat.data;

@@ -44,9 +44,9 @@ export default function Rendezvous() {
   const fetchAll = () => {
     setLoading(true);
     Promise.all([
-      axios.get('http://localhost:3001/rendezvous'),
-      axios.get('http://localhost:3001/patients'),
-      axios.get('http://localhost:3001/praticiens')
+      axios.get('https://mon-api-rmv3.onrender.com/rendezvous'),
+      axios.get('https://mon-api-rmv3.onrender.com/patients'),
+      axios.get('https://mon-api-rmv3.onrender.com/praticiens')
     ])
       .then(([rdvRes, patRes, pratRes]) => {
         setRdvs(rdvRes.data);
@@ -86,8 +86,8 @@ export default function Rendezvous() {
     e.preventDefault();
     const method = isEditing ? 'put' : 'post';
     const url = isEditing
-      ? `http://localhost:3001/rendezvous/${form.idRdv}`
-      : `http://localhost:3001/rendezvous`;
+      ? `https://mon-api-rmv3.onrender.com/rendezvous/${form.idRdv}`
+      : `https://mon-api-rmv3.onrender.com/rendezvous`;
 
     axios[method](url, form)
       .then(() => {
@@ -108,7 +108,7 @@ export default function Rendezvous() {
 
   const handleDelete = (id) => {
     if (window.confirm("⚠️ Voulez-vous vraiment supprimer ce rendez-vous ? Cette action est irréversible.")) {
-      axios.delete(`http://localhost:3001/rendezvous/${id}`)
+      axios.delete(`https://mon-api-rmv3.onrender.com/rendezvous/${id}`)
         .then(() => {
           fetchAll();
           handleSuccess("Rendez-vous supprimé avec succès");
