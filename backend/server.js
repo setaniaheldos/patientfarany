@@ -152,12 +152,23 @@ app.get('/patients', async (req, res) => {
 app.post('/patients', async (req, res) => {
   const { cinPatient, prenom, nom, age, adresse, email, sexe, telephone } = req.body;
   try {
-    const result = await pool.query(
-      `INSERT INTO patients VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
-      [cinPatient, prenom, nom, age, adresse, email, sexe, telephone]
+    // Assurez-vous que age est un entier (PostgreSQL attend INTEGER)
+    const ageInt = parseInt(age, 10);
+    if (isNaN(ageInt)) {
+      return res.status(400).json({ error: "L'âge doit être un nombre entier valide." });
+    }
+
+    await pool.query(
+      `INSERT INTO patients (cinPatient, prenom, nom, age, adresse, email, sexe, telephone) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [cinPatient, prenom, nom, ageInt, adresse, email, sexe, telephone]
     );
-    res.status(201).json({ id: result.rows[0].id });
+    res.status(201).json({ message: 'Patient ajouté avec succès', cinPatient });
   } catch (err) {
+    console.error('Erreur POST patients:', err);
+    if (err.code === '23505') { // Violation unique (CIN ou email/tel dupliqué)
+      return res.status(400).json({ error: 'CIN, email ou téléphone déjà existant. Vérifiez les doublons.' });
+    }
     res.status(500).json({ error: err.message });
   }
 });
@@ -166,12 +177,22 @@ app.put('/patients/:cinPatient', async (req, res) => {
   const { prenom, nom, age, adresse, email, sexe, telephone } = req.body;
   const { cinPatient } = req.params;
   try {
+    const ageInt = parseInt(age, 10);
+    if (isNaN(ageInt)) {
+      return res.status(400).json({ error: "L'âge doit être un nombre entier valide." });
+    }
+
     const result = await pool.query(
       `UPDATE patients SET prenom=$1, nom=$2, age=$3, adresse=$4, email=$5, sexe=$6, telephone=$7 WHERE cinPatient=$8`,
-      [prenom, nom, age, adresse, email, sexe, telephone, cinPatient]
+      [prenom, nom, ageInt, adresse, email, sexe, telephone, cinPatient]
     );
-    res.json({ modified: result.rowCount });
+    if (result.rowCount === 0) return res.status(404).json({ error: "Patient non trouvé" });
+    res.json({ modified: result.rowCount, message: 'Patient mis à jour' });
   } catch (err) {
+    console.error('Erreur PUT patients:', err);
+    if (err.code === '23505') {
+      return res.status(400).json({ error: 'Email ou téléphone déjà utilisé par un autre patient.' });
+    }
     res.status(500).json({ error: err.message });
   }
 });
@@ -329,7 +350,7 @@ app.post('/login', async (req, res) => {
     const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     const user = result.rows[0];
     if (!user) return res.status(401).json({ error: 'Utilisateur non trouvé' });
-    if (!user.isapproved) return res.status(403).json({ error: 'Compte en attente de validation' });
+    if (!user.isApproved) return res.status(403).json({ error: 'Compte en attente de validation' });
 
     const match = await bcrypt.compare(password, user.password);
     if (match) res.json({ message: 'Connexion réussie', user });
@@ -670,4 +691,3 @@ app.put('/rendezvous/:id', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Serveur lancé sur http://localhost:${PORT}`);
 });
-
